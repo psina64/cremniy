@@ -1380,8 +1380,8 @@ void QHexView::moveNext(bool select) {
             qMin<qint64>(column, this->getLastColumn(line) + offset));
     else
         this->hexCursor()->move(
-            qMin<qint64>(line, this->lines()),
-            qMin<qint64>(column, this->getLastColumn(line) + offset));
+            line,
+            column);
 }
 
 void QHexView::movePrevious(bool select) {
@@ -1512,8 +1512,9 @@ bool QHexView::keyPressTextInput(QKeyEvent* e) {
         return false;
 
     bool atend = m_hexcursor->offset() >= m_hexdocument->length();
-    if(atend && m_hexcursor->mode() == QHexCursor::Mode::Overwrite)
-        return false;
+    if(atend && m_hexcursor->mode() == QHexCursor::Mode::Overwrite){
+        // return false;
+    }
 
     char key = e->text().at(0).toLatin1();
 

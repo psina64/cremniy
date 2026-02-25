@@ -42,7 +42,7 @@ ToolTab::ToolTab(FileTab *fwparent, QString path) :
 
     QWidget *emptyWidget2 = new QWidget();
 
-    QHexDocument* document = QHexDocument::fromFile("/home/igmunv/test/notify.sh");
+    QHexDocument* document = QHexDocument::fromFile(path);
 
     QWidget *hextabwidget = new QWidget(this);
     hextabwidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);

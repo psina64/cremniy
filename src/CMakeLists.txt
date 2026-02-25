@@ -51,6 +51,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         utils/iconprovider.h
 
         resources/cremniy_res.qrc
+        utils/syncfiledata.h utils/syncfiledata.cpp
     )
     target_include_directories(untitled1 PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
