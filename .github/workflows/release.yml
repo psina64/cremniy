@@ -39,7 +39,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgl1-mesa-dev libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libxcb-cursor0 libfuse2 file
+          sudo apt-get install -y libgl1-mesa-dev libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libxcb-cursor0 libfuse2 file imagemagick
           
       - name: Download linuxdeploy tools
         if: runner.os == 'Linux'
@@ -66,13 +66,16 @@ jobs:
       - name: Package (Linux) - AppImage
         if: runner.os == 'Linux'
         run: |
+          # Resize icon to 256x256 for AppImage compatibility
+          convert src/resources/icons/icon.png -resize 256x256 cremniy-256.png
+          
           export QML_SOURCES_PATHS=${{ github.workspace }}/src
           export QMAKE=$Qt6_DIR/bin/qmake
           ./linuxdeploy-x86_64.AppImage \
             --appdir AppDir \
             --executable build/cremniy \
             --desktop-file cremniy.desktop \
-            --icon-file src/resources/icons/icon.png \
+            --icon-file cremniy-256.png \
             --plugin qt \
             --output appimage
           mv Cremniy-*.AppImage ${{ matrix.artifact_name }}.AppImage || mv cremniy-*.AppImage ${{ matrix.artifact_name }}.AppImage
