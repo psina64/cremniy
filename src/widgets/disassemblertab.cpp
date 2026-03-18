@@ -176,6 +176,23 @@ QString DisassemblerTab::formatLine(const LineInfo &li) const
         }
         bytes = spaced;
     }
+    // Prevent huge byte-runs from destroying layout (e.g. coalesced invalid blocks).
+    // Show preview of first 16 bytes in the "bytes" column.
+    {
+        const QString b = normalizeBytes(li.bytes);
+        const int totalBytes = b.size() / 2;
+        const int previewBytes = qMin(16, totalBytes);
+        if (totalBytes > 0) {
+            QString spaced;
+            for (int i = 0; i < previewBytes * 2; i += 2) {
+                if (i) spaced += ' ';
+                spaced += b.mid(i, 2);
+            }
+            if (totalBytes > previewBytes)
+                spaced += " …";
+            bytes = spaced;
+        }
+    }
     bytes = bytes.leftJustified(28, ' ');
 
     QString mnem = li.mnemonic;
@@ -184,15 +201,23 @@ QString DisassemblerTab::formatLine(const LineInfo &li) const
     const QString c = comment.isEmpty() ? QString() : ("  " + comment);
 
     // radare2 can return "invalid" when bytes can't be decoded as an instruction.
-    // Render it as data bytes to keep the listing useful.
+    // Render it as data bytes to keep the listing useful. Show only a preview to avoid huge lines.
     if (mnem.trimmed().compare("invalid", Qt::CaseInsensitive) == 0 && !bytes.trimmed().isEmpty()) {
-        // Show as ".byte 0xAA, 0xBB, ..."
         const QString b = normalizeBytes(li.bytes);
+        const int totalBytes = b.size() / 2;
+        const int previewBytes = qMin(16, totalBytes);
+
         QStringList parts;
-        for (int i = 0; i + 1 < b.size(); i += 2)
+        parts.reserve(previewBytes);
+        for (int i = 0; i + 1 < b.size() && (i / 2) < previewBytes; i += 2)
             parts << ("0x" + b.mid(i, 2));
-        const QString data = QString(".byte %1").arg(parts.join(", "));
-        return QString("%1: %2  %3%4").arg(addr, bytes, data, c.isEmpty() ? "  ; invalid instruction" : (c + "  ; invalid instruction"));
+
+        QString data = QString(".byte %1").arg(parts.join(", "));
+        if (totalBytes > previewBytes)
+            data += ", …";
+
+        const QString invInfo = QString("  ; invalid bytes (%1)").arg(totalBytes);
+        return QString("%1: %2  %3%4%5").arg(addr, bytes, data, c, invInfo);
     }
     if (!mnem.isEmpty() && ops.isEmpty())
         return QString("%1: %2  %3%4").arg(addr, bytes, mnem, c);
@@ -1084,6 +1109,41 @@ void DisassemblerTab::applyFilter()
         if (funcByAddr.contains(a)) {
             out << QString("; ─── %1 (%2) ───").arg(funcByAddr.value(a), li.address.trimmed());
             m_visibleLineMap << -1; // header line
+        }
+
+        // Coalesce consecutive "invalid" into a single data line (radare2 often marks undecodable bytes one-by-one).
+        if (li.mnemonic.trimmed().compare("invalid", Qt::CaseInsensitive) == 0 && !li.bytes.trimmed().isEmpty()) {
+            quint64 curAddr = 0;
+            if (parseHexU64(li.address, &curAddr)) {
+                QString joined = normalizeBytes(li.bytes);
+                quint64 nextExpected = curAddr + static_cast<quint64>(joined.size() / 2);
+
+                int j = i + 1;
+                for (; j < m_lines.size(); ++j) {
+                    const LineInfo &n = m_lines[j];
+                    if (n.sectionIndex != li.sectionIndex) break;
+                    if (n.mnemonic.trimmed().compare("invalid", Qt::CaseInsensitive) != 0) break;
+                    const QString nb = normalizeBytes(n.bytes);
+                    if (nb.isEmpty()) break;
+                    quint64 na = 0;
+                    if (!parseHexU64(n.address, &na)) break;
+                    if (na != nextExpected) break;
+                    joined += nb;
+                    nextExpected += static_cast<quint64>(nb.size() / 2);
+                }
+
+                LineInfo tmp = li;
+                tmp.bytes = joined;
+                tmp.bytesL = joined.toLower();
+                tmp.operands.clear();
+                tmp.opsL.clear();
+
+                out << formatLine(tmp);
+                m_visibleLineMap << i; // map to first underlying line (hex-patch here still works)
+                ++shown;
+                i = j - 1;
+                continue;
+            }
         }
 
         out << formatLine(li);

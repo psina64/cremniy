@@ -4,6 +4,7 @@
 #include <QCheckBox>
 #include <QClipboard>
 #include <QComboBox>
+#include <QAbstractItemView>
 #include <QFormLayout>
 #include <QGuiApplication>
 #include <QHBoxLayout>
@@ -50,6 +51,17 @@ ReverseCalculatorDialog::ReverseCalculatorDialog(QWidget *parent)
     m_width->addItem("32", 32);
     m_width->addItem("64", 64);
     m_width->setCurrentIndex(2);
+    m_width->setMinimumWidth(64);
+    // Ensure items are visible in dark themes.
+    m_width->setStyleSheet(
+        "QComboBox { background:#1a1a1a; color:#60a5fa; border:1px solid #262626; padding:2px 6px; }"
+        "QComboBox::drop-down { border: none; width: 18px; }"
+        "QComboBox QAbstractItemView { background:#1a1a1a; color:#21c55d; selection-background-color:#2d2d50; selection-color:#ffffff; }");
+    if (m_width->view()) {
+        m_width->view()->setStyleSheet(
+            "QListView { background:#1a1a1a; color:#21c55d; }"
+            "QListView::item:selected { background:#2d2d50; color:#ffffff; }");
+    }
     topRow->addWidget(new QLabel(tr("Bits:"), this));
     topRow->addWidget(m_width);
 

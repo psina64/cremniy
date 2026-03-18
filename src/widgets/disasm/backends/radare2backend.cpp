@@ -214,10 +214,20 @@ Radare2Backend::Result Radare2Backend::disassembleFile(const QString &r2Path,
         const QString perm = o.value("perm").toString(); // e.g. "r-x"
         quint64 vaddr = 0;
         parseU64FromJson(o.value("vaddr"), &vaddr);
+        quint64 vsize = 0;
+        parseU64FromJson(o.value("vsize"), &vsize);
+        if (vsize == 0)
+            parseU64FromJson(o.value("size"), &vsize);
 
         if (name.isEmpty()) continue;
-        // Disassemble only executable sections to avoid garbage in .rodata/.symtab/etc.
+        // Disassemble only code-like sections to avoid garbage disassembly of data sections.
+        // Some binaries / r2 configs may mark non-code sections oddly; keep a conservative whitelist.
+        static const QRegularExpression reCodeSec(R"(^\.(text|init|fini|plt(\..*)?)$)");
+        if (!reCodeSec.match(name).hasMatch())
+            continue;
         if (!perm.contains('x'))
+            continue;
+        if (vaddr == 0 || vsize == 0)
             continue;
 
         DisasmSection sec;
@@ -245,6 +255,7 @@ Radare2Backend::Result Radare2Backend::disassembleFile(const QString &r2Path,
 
         const QJsonArray arr = doc2.array();
         sec.instructions.reserve(arr.size());
+        const quint64 endAddr = vaddr + vsize;
         for (const QJsonValue &iv : arr) {
             if (!iv.isObject()) continue;
             const QJsonObject io = iv.toObject();
@@ -256,6 +267,13 @@ Radare2Backend::Result Radare2Backend::disassembleFile(const QString &r2Path,
                         || parseU64FromJson(io.value("addr"), &off)
                         || parseU64FromJson(io.value("address"), &off)
                         || parseU64FromJson(io.value("at"), &off);
+            if (gotAddr) {
+                // Stop once we leave section bounds; r2 can continue disassembling into next sections/data.
+                if (off < vaddr)
+                    continue;
+                if (off >= endAddr)
+                    break;
+            }
 
             // Keep something visible even if JSON misses address field.
             insn.address = QString("0x%1").arg(QString::number(gotAddr ? off : 0, 16));
