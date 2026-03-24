@@ -6,7 +6,6 @@
 #include <qpushbutton.h>
 #include <qstackedlayout.h>
 #include "filemanager.h"
-#include "globalwidgetsmanager.h"
 #include "utils.h"
 
 #include "core/ToolTabFactory.h"
@@ -69,14 +68,14 @@ CodeEditorTab::CodeEditorTab(QWidget *parent)
     // - - Connects - -
 
     // Trigger: Menu Bar: View->wordWrap - setWordWrapMode
-    connect(GlobalWidgetsManager::instance().get_IDEWindow_menuBar_view_wordWrap(),
-            &QAction::changed,
-            this, [this]{
-                if (GlobalWidgetsManager::instance().get_IDEWindow_menuBar_view_wordWrap()->isChecked())
-                    m_codeEditorWidget->setWordWrapMode(QTextOption::WordWrap);
-                else
-                    m_codeEditorWidget->setWordWrapMode(QTextOption::NoWrap);
-            });
+    // connect(GlobalWidgetsManager::instance().get_IDEWindow_menuBar_view_wordWrap(),
+    //         &QAction::changed,
+    //         this, [this]{
+    //             if (GlobalWidgetsManager::instance().get_IDEWindow_menuBar_view_wordWrap()->isChecked())
+    //                 m_codeEditorWidget->setWordWrapMode(QTextOption::WordWrap);
+    //             else
+    //                 m_codeEditorWidget->setWordWrapMode(QTextOption::NoWrap);
+    //         });
 
     // Clicked: Open File Anyway Button
     connect(anywayOpenBtn, &QPushButton::clicked, this, [this]{

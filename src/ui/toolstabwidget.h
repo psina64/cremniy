@@ -12,11 +12,11 @@ class QCompleter;
 class QStyleSyntaxHighlighter;
 class QCodeEditor;
 
-class ToolTabWidget : public QTabWidget
+class ToolsTabWidget : public QTabWidget
 {
     Q_OBJECT
 public:
-    ToolTabWidget(QWidget *parent, QString path);
+    ToolsTabWidget(QWidget *parent, QString path);
     int saveToFileCurrentTab(QString path);
     void setDataInTabs(QByteArray &data, int index = -1, int excluded_index = -1);
 
@@ -33,6 +33,7 @@ public slots:
 signals:
     void removeStarSignal();
     void setupStarSignal();
+    void saveFileSignal();
 
 };
 

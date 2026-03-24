@@ -28,7 +28,6 @@
 #include <QClipboard>
 
 #include "utils/appsettings.h"
-#include "utils/globalwidgetsmanager.h"
 #include "disasm/disasmtexthighlighter.h"
 #include "core/ToolTabFactory.h"
 
@@ -269,8 +268,8 @@ DisassemblerTab::DisassemblerTab(QWidget *parent)
 
     m_thread->start();
 
-    connect(&GlobalWidgetsManager::instance(), &GlobalWidgetsManager::actionTriggered,
-            this, &DisassemblerTab::onGlobalActionTriggered);
+    // connect(&GlobalWidgetsManager::instance(), &GlobalWidgetsManager::actionTriggered,
+            // this, &DisassemblerTab::onGlobalActionTriggered);
 
     updateBackendUiHint();
 }
