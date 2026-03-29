@@ -15,6 +15,7 @@
 - [ ] [Баг: Неправильное отображение байтов в HEX-Editor на MacOS](https://github.com/Cremniy-Project/cremniy/issues/43)
 - [ ] [Баг: Не правильно работает синтаксис Makefile](https://github.com/Cremniy-Project/cremniy/issues/41)
 - [ ] [Баг: Отображение полоски в HEX-Editor на Windows](https://github.com/Cremniy-Project/cremniy/issues/33)
+- [ ] [Баг: Нажатие на Close Project вызывает Segmentation fault](https://github.com/Cremniy-Project/cremniy/issues/74)
 
 <br>
 
@@ -22,6 +23,8 @@
 - [ ] [Оптимизировать хранение данных у QHexView](https://github.com/Cremniy-Project/cremniy/issues/57)
 - [ ] [Улучшение дизайна Disassembler](https://github.com/Cremniy-Project/cremniy/issues/55)
 - [ ] [Добавить многоязычность](https://github.com/Cremniy-Project/cremniy/issues/67)
+- [ ] [Использование иконок Breeze для файлов в QTreeView](https://github.com/Cremniy-Project/cremniy/issues/72)
+- [ ] [Реализовать StatusBar](https://github.com/Cremniy-Project/cremniy/issues/73)
 - [ ] [Основы базовой архитектуры для обеспечения расширяемости](https://github.com/Cremniy-Project/cremniy/issues/29)
 - [ ] [Сборка и запуск проекта пользователя](https://github.com/Cremniy-Project/cremniy/issues/6)
 - [ ] [Отображение чисел в разных системах счисления при наведении](https://github.com/Cremniy-Project/cremniy/issues/28)
