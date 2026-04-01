@@ -13,8 +13,6 @@
 
 ## 🛠 Ближайшие задачи
 
-> ⚠️ На текущий релиз (v0.1.3) все усилия должны быть сосредоточены на **редакторе кода** и **критических багах**. PR, не связанные с этими задачами, временно **не будут приниматься**.
-
 ### 🐞 Баги
 
 - [ ] [Баг: Неправильное отображение байтов в HEX-Editor на MacOS](https://github.com/Cremniy-Project/cremniy/issues/43)
@@ -24,18 +22,18 @@
 ### ✨ Улучшения и новые задачи
 
 - [ ] [Реализация кастомного QPlainText для Code Editor](https://github.com/Cremniy-Project/cremniy/issues/56)
-- [ ] ~~[Оптимизировать хранение данных у QHexView](https://github.com/Cremniy-Project/cremniy/issues/57)~~
-- [ ] ~~[Улучшение дизайна Disassembler](https://github.com/Cremniy-Project/cremniy/issues/55)~~
-- [ ] ~~[Добавить многоязычность](https://github.com/Cremniy-Project/cremniy/issues/67)~~
-- [ ] ~~[Основы базовой архитектуры для обеспечения расширяемости](https://github.com/Cremniy-Project/cremniy/issues/29)~~
-- [ ] ~~[Сборка и запуск проекта пользователя](https://github.com/Cremniy-Project/cremniy/issues/6)~~
-- [ ] ~~[Использование иконок Breeze для файлов в QTreeView](https://github.com/Cremniy-Project/cremniy/issues/72)~~
-- [ ] ~~[Реализовать StatusBar](https://github.com/Cremniy-Project/cremniy/issues/73)~~
-- [ ] ~~[Поиск строки по всем файлам проекта](https://github.com/Cremniy-Project/cremniy/issues/76)~~
-- [ ] ~~[Закрепление вкладки файла (FileTab)](https://github.com/Cremniy-Project/cremniy/issues/75)~~
-- [ ] ~~[Перемещение файлов по директориям в QTreeView](https://github.com/Cremniy-Project/cremniy/issues/77)~~
-- [ ] ~~[Отображение чисел в разных системах счисления при наведении](https://github.com/Cremniy-Project/cremniy/issues/28)~~
-- [ ] ~~[Работа с Git](https://github.com/Cremniy-Project/cremniy/issues/42)~~
+- [ ] [Оптимизировать хранение данных у QHexView](https://github.com/Cremniy-Project/cremniy/issues/57)
+- [ ] [Улучшение дизайна Disassembler](https://github.com/Cremniy-Project/cremniy/issues/55)
+- [ ] [Добавить многоязычность](https://github.com/Cremniy-Project/cremniy/issues/67)
+- [ ] [Основы базовой архитектуры для обеспечения расширяемости](https://github.com/Cremniy-Project/cremniy/issues/29)
+- [ ] [Сборка и запуск проекта пользователя](https://github.com/Cremniy-Project/cremniy/issues/6)
+- [ ] [Использование иконок Breeze для файлов в QTreeView](https://github.com/Cremniy-Project/cremniy/issues/72)
+- [ ] [Реализовать StatusBar](https://github.com/Cremniy-Project/cremniy/issues/73)
+- [ ] [Поиск строки по всем файлам проекта](https://github.com/Cremniy-Project/cremniy/issues/76)
+- [ ] [Закрепление вкладки файла (FileTab)](https://github.com/Cremniy-Project/cremniy/issues/75)
+- [ ] [Перемещение файлов по директориям в QTreeView](https://github.com/Cremniy-Project/cremniy/issues/77)
+- [ ] [Отображение чисел в разных системах счисления при наведении](https://github.com/Cremniy-Project/cremniy/issues/28)
+- [ ] [Работа с Git](https://github.com/Cremniy-Project/cremniy/issues/42)
 
 ## 🔮 Будущие планы
 
