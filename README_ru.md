@@ -150,7 +150,7 @@ cmake --build . --config Release
 
 Все участники указываются в [ACKNOWLEDGEMENTS.md](ACKNOWLEDGEMENTS.md) и упоминаются в видео на [YouTube-канале](https://www.youtube.com/@igmunv).
 
-Подробнее — в [CONTRIBUTING.md](CONTRIBUTING.md).
+Подробнее — в [CONTRIBUTING.md](CONTRIBUTING_ru.md).
 
 
 ## Лицензия
