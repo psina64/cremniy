@@ -25,6 +25,10 @@ You can help in several ways:
 All current **tasks** and **project plans** are gathered in the [roadmap](ROADMAP.md).  
 Before creating an Issue or PR, it is **recommended to check** what has already been planned to **avoid duplicate work**.
 
+## Language Policy
+
+To keep the project accessible to international contributors, **all issues, pull requests, and commit messages must be written in English**. 
+
 ## Working with Branches
 
 Only two branches are officially maintained in the main repository:
