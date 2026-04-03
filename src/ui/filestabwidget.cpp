@@ -16,6 +16,7 @@
 
 FilesTabWidget::FilesTabWidget(QWidget *parent) {
     connect(this, &QTabWidget::currentChanged, this, &FilesTabWidget::tabSelect);
+    connect(tabBar(), &QTabBar::tabMoved, this, &FilesTabWidget::onTabMoved);
     tabBar()->installEventFilter(this);
     QCoreApplication::instance()->installEventFilter(this);
 }
@@ -67,9 +68,12 @@ void FilesTabWidget::updatePinnedState(FileTab *tab) {
     int index = indexOf(tab);
     if (index != -1) {
         if (tab->isPinned()) {
-            if (index != 0) {
-                tabBar()->moveTab(index, 0);
-                index = 0;
+            const int targetIndex = 0;
+            if (index != targetIndex) {
+                m_adjustingTabMove = true;
+                tabBar()->moveTab(index, targetIndex);
+                m_adjustingTabMove = false;
+                index = targetIndex;
             }
         }
         setPinnedTabText(index, tab);
@@ -197,6 +201,38 @@ void FilesTabWidget::switchTab(int page) {
     setCurrentIndex(newIdx);
 }
 
+void FilesTabWidget::onTabMoved(int from, int to) {
+    if (m_adjustingTabMove) {
+        return;
+    }
+
+    FileTab *tab = qobject_cast<FileTab *>(widget(to));
+    if (!tab) {
+        return;
+    }
+
+    const int pinned = pinnedCount();
+    const bool isPinned = tab->isPinned();
+    const bool toPinnedZone = to < pinned;
+    const bool fromPinnedZone = from < pinned;
+
+    if (isPinned) {
+        if (fromPinnedZone && toPinnedZone) {
+            return;
+        }
+        m_adjustingTabMove = true;
+        tabBar()->moveTab(to, from);
+        m_adjustingTabMove = false;
+        return;
+    }
+
+    if (!isPinned && toPinnedZone) {
+        m_adjustingTabMove = true;
+        tabBar()->moveTab(to, pinned);
+        m_adjustingTabMove = false;
+    }
+}
+
 void FilesTabWidget::setPinnedTabText(int index, FileTab *tab) {
     static const QIcon pinIcon = []() {
         QFont font;
@@ -225,4 +261,15 @@ void FilesTabWidget::setPinnedTabText(int index, FileTab *tab) {
         setTabIcon(index, QIcon());
     }
     setTabText(index, text);
+}
+
+int FilesTabWidget::pinnedCount() const {
+    int countPinned = 0;
+    for (int i = 0; i < count(); ++i) {
+        FileTab *tab = qobject_cast<FileTab *>(widget(i));
+        if (tab && tab->isPinned()) {
+            ++countPinned;
+        }
+    }
+    return countPinned;
 }
