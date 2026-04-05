@@ -54,6 +54,12 @@ WelcomeForm::WelcomeForm(QWidget *parent)
     QPushButton *create_proj_btn = new QPushButton("Create", pageWelcome);
     btnLayout->addWidget(create_proj_btn);
 
+    remove_recent_proj_btn = new QPushButton("×", pageWelcome);
+    remove_recent_proj_btn->setFixedWidth(28);
+    remove_recent_proj_btn->setStyleSheet("QPushButton { padding: 5px 0px; }");
+    btnLayout->addWidget(remove_recent_proj_btn);
+    remove_recent_proj_btn->setEnabled(false);
+
     l1->addLayout(btnLayout);
 
     stack->addWidget(pageWelcome);
@@ -118,6 +124,7 @@ WelcomeForm::WelcomeForm(QWidget *parent)
     connect(RecentProjectsList->selectionModel(), &QItemSelectionModel::selectionChanged, this, &WelcomeForm::SelectProjectInList);
 
     connect(open_recent_proj_btn, &QPushButton::clicked, this, &WelcomeForm::OpenRecentProjectHandler);
+    connect(remove_recent_proj_btn, &QPushButton::clicked, this, &WelcomeForm::RemoveRecentProjectHandler);
     connect(open_browse_proj_btn, &QPushButton::clicked, this, &WelcomeForm::OpenProjectHandler);
     connect(create_proj_btn, &QPushButton::clicked, this, &WelcomeForm::CreateProjectHandler);
 
@@ -135,6 +142,10 @@ void WelcomeForm::SelectProjectInList(){
     open_recent_proj_btn->setEnabled(true);
     open_recent_proj_btn->setProperty("state", "green");
     open_recent_proj_btn->style()->polish(open_recent_proj_btn);
+
+    remove_recent_proj_btn->setEnabled(true);
+    remove_recent_proj_btn->setProperty("state", "red");
+    remove_recent_proj_btn->style()->polish(remove_recent_proj_btn);
 }
 
 void WelcomeForm::OpenRecentProjectHandler(){
@@ -143,6 +154,28 @@ void WelcomeForm::OpenRecentProjectHandler(){
     if (index.isValid())
         OpenProject(index.data().toString());
 }
+
+void WelcomeForm::RemoveRecentProjectHandler(){
+    QModelIndex index = RecentProjectsList->currentIndex();
+
+    if (index.isValid()) {
+        QString projectPath = index.data(Qt::DisplayRole).toString();
+        RecentProjectsList->model()->removeRow(index.row());
+        utils::ProjectsHistoryManager::removeProjectFromHistory(projectPath);
+    }
+
+    index = RecentProjectsList->currentIndex();
+    if (!index.isValid()) {
+        open_recent_proj_btn->setEnabled(false);
+        open_recent_proj_btn->setProperty("state", QVariant());
+        open_recent_proj_btn->style()->polish(open_recent_proj_btn);
+
+        remove_recent_proj_btn->setEnabled(false);
+        remove_recent_proj_btn->setProperty("state", QVariant());
+        remove_recent_proj_btn->style()->polish(remove_recent_proj_btn);
+    }
+}
+
 
 void WelcomeForm::OpenProjectHandler()
 {
