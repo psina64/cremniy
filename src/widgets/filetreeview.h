@@ -3,6 +3,12 @@
 
 #include <QTreeView>
 #include <QMouseEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QTimer>
+#include <QKeyEvent>
+#include <QList>
+#include <QPair>
 
 
 class FileTreeView : public QTreeView {
@@ -16,6 +22,12 @@ signals:
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
+
+private:
+    QTimer* m_expandTimer;
+    QModelIndex m_hoverIndex;
+    QList<QPair<QString, QString>> m_undoMoveHistory;
 };
 
 
