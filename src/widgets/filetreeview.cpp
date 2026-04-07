@@ -10,20 +10,37 @@
 FileTreeView::FileTreeView(QWidget *parent)
     : QTreeView(parent)
 {
+    m_expandTimer = new QTimer(this);
+    m_expandTimer->setInterval(750);
+    m_expandTimer->setSingleShot(true);
+    connect(m_expandTimer, &QTimer::timeout, this, [this]() {
+        if (m_hoverIndex.isValid()) {
+            expand(m_hoverIndex);
+        }
+    });
 }
 
 void FileTreeView::mousePressEvent(QMouseEvent *event)
 {
-    QModelIndex index = this->indexAt(event->pos());
+    QModelIndex index = this->indexAt(event->position().toPoint());
     if (index.isValid())
         emit mouseClicked(index, event->button());
 
     QTreeView::mousePressEvent(event);
 }
 
+void FileTreeView::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasUrls()) {
+        event->acceptProposedAction();
+    } else {
+        QTreeView::dragEnterEvent(event);
+    }
+}
+
 void FileTreeView::dragMoveEvent(QDragMoveEvent *event)
 {
-    QModelIndex currentHover = indexAt(event->pos());
+    QModelIndex currentHover = indexAt(event->position().toPoint());
     
     if (currentHover != m_hoverIndex) {
         m_hoverIndex = currentHover;
@@ -54,7 +71,7 @@ void FileTreeView::dropEvent(QDropEvent *event)
         return;
     }
 
-    QModelIndex targetIndex = indexAt(event->pos());
+    QModelIndex targetIndex = indexAt(event->position().toPoint());
     QString targetDirPath;
 
     if (!targetIndex.isValid()) {
