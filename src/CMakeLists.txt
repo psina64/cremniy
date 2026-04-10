@@ -46,6 +46,8 @@ qt_add_executable(${PROJECT_NAME}
     # Utils
     utils/utils.h
     utils/utils.cpp
+    utils/iconprovider.cpp
+    utils/iconprovider.h
 
     # Core
     core/file/filecontext.h
