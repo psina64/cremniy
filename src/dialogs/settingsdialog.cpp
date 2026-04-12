@@ -36,14 +36,18 @@ static bool isRunnableExecutable(const QString &path)
 static void setStatusLabel(QLabel *lbl, bool ok, const QString &text)
 {
     // Text-only status to avoid adding icon resources.
-    // Use a monospace-friendly glyph and color.
+    // Use a monospace-friendly glyph; the color comes from QSS.
     lbl->setText(ok ? QStringLiteral("✓ ") + text : QStringLiteral("✗ ") + text);
-    lbl->setStyleSheet(ok ? "color: #39d353;" : "color: #f85149;");
+    lbl->setProperty("statusState", ok ? "ok" : "missing");
+    lbl->style()->unpolish(lbl);
+    lbl->style()->polish(lbl);
+    lbl->update();
 }
 
 SettingsDialog::SettingsDialog(QWidget *parent)
     : QDialog(parent)
 {
+    setObjectName("settingsDialog");
     setWindowTitle(tr("Settings"));
     setModal(true);
     setMinimumSize(760, 520);
@@ -81,6 +85,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
         m_objdumpPath = new QLineEdit(row);
         m_objdumpPath->setPlaceholderText(tr("Leave empty to use PATH lookup"));
         m_objdumpStatus = new QLabel(row);
+        m_objdumpStatus->setObjectName("settingsStatusLabel");
         m_objdumpStatus->setMinimumWidth(150);
         m_objdumpStatus->setTextInteractionFlags(Qt::TextSelectableByMouse);
         auto *browse = new QPushButton(tr("Browse…"), row);
@@ -101,6 +106,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
         m_radare2Path = new QLineEdit(row);
         m_radare2Path->setPlaceholderText(tr("Path to r2 (radare2) executable"));
         m_radare2Status = new QLabel(row);
+        m_radare2Status->setObjectName("settingsStatusLabel");
         m_radare2Status->setMinimumWidth(150);
         m_radare2Status->setTextInteractionFlags(Qt::TextSelectableByMouse);
         auto *browse = new QPushButton(tr("Browse…"), row);
@@ -119,6 +125,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
         auto *rowLayout = new QHBoxLayout(row);
         rowLayout->setContentsMargins(0, 0, 0, 0);
         m_fileStatus = new QLabel(row);
+        m_fileStatus->setObjectName("settingsStatusLabel");
         m_fileStatus->setTextInteractionFlags(Qt::TextSelectableByMouse);
         rowLayout->addWidget(m_fileStatus, 1);
         form->addRow(tr("Dependency: file(1)"), row);
@@ -150,14 +157,12 @@ SettingsDialog::SettingsDialog(QWidget *parent)
         root->addWidget(separator);
 
         auto *lbl = new QLabel(tr("Excluded Files / Folders"), this);
-        QFont bold = lbl->font();
-        bold.setBold(true);
-        lbl->setFont(bold);
+        lbl->setObjectName("settingsSectionTitle");
         root->addWidget(lbl);
 
         auto *hint = new QLabel(tr("One pattern per line. Examples: node_modules, .git, *.log, dist/"), this);
+        hint->setObjectName("settingsHintLabel");
         hint->setWordWrap(true);
-        hint->setStyleSheet("color: gray; font-size: 11px;");
         root->addWidget(hint);
 
         m_excludedPatterns = new QPlainTextEdit(this);
@@ -410,4 +415,3 @@ void SettingsDialog::updateDependencyStatus()
         m_fileStatus->setToolTip(ok ? fileExe : tr("The objdump backend uses 'file -b <path>' for arch detection"));
     }
 }
-
