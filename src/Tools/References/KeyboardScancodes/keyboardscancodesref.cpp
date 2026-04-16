@@ -1,6 +1,6 @@
 #include "keyboardscancodesref.h"
+#include "keyboardscancodevizwidget.h"
 #include "ui/MenuBar/Menus/References/referencewindowfactory.h"
-#include "widgets/keyboardscancodevizwidget.h"
 
 #include <QAbstractItemView>
 #include <QHeaderView>

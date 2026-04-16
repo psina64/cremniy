@@ -32,8 +32,6 @@ qt_add_executable(${PROJECT_NAME}
     dialogs/settingsdialog.h
 
     # Widgets
-    widgets/keyboardscancodevizwidget.cpp
-    widgets/keyboardscancodevizwidget.h
     widgets/clickablelineedit.h
     widgets/filetab.cpp
     widgets/filetab.h
@@ -41,6 +39,10 @@ qt_add_executable(${PROJECT_NAME}
     widgets/filetreeview.h
     widgets/terminal/terminalwidget.cpp
     widgets/terminal/terminalwidget.h
+
+    # Tools / References
+    Tools/References/KeyboardScancodes/keyboardscancodevizwidget.cpp
+    Tools/References/KeyboardScancodes/keyboardscancodevizwidget.h
 
     # Resources
     resources/cremniy_res.qrc
