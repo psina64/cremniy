@@ -30,7 +30,7 @@ ToolsMenu::ToolsMenu() : BaseMenu("Tools") {
 
         for (const ModuleDescription<TabBase>& desc : creatorTabModules){
 
-            QAction* newAction = new QAction(desc.name, this);
+            QAction* newAction = new QAction(desc.name(), this);
             groupMenu->addAction(newAction);
 
             connect(newAction, &QAction::triggered, this, [this, desc](){
@@ -57,7 +57,7 @@ ToolsMenu::ToolsMenu() : BaseMenu("Tools") {
 
         for (const ModuleDescription<WindowBase>& desc : descWindowModules){
 
-            QAction* newAction = new QAction(desc.name, this);
+            QAction* newAction = new QAction(desc.name(), this);
             groupMenu->addAction(newAction);
 
             connect(newAction, &QAction::triggered, this, [this, desc](){
