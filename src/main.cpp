@@ -8,9 +8,9 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    QCoreApplication::setOrganizationName("cremniy");
+    QCoreApplication::setOrganizationName("Munirov");
     QCoreApplication::setApplicationName("Cremniy");
-    a.setWindowIcon(QIcon(":/icons/icon.png"));
+    a.setWindowIcon(QIcon(":/icons/icon.svg"));
 
     // Themes
     QIcon::setThemeSearchPaths({":/icons"});
