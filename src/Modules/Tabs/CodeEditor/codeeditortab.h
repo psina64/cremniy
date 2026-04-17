@@ -66,7 +66,7 @@ private:
 public:
     explicit CodeEditorTab(QWidget *parent = nullptr);
 
-    QIcon icon() const override { return QIcon(":/icons/code.png"); };
+    QIcon icon() const override { return QIcon(":/icons/code.svg"); };
 
     void setFileDataBuffer(FileDataBuffer* newFileDataBuffer) override;
 

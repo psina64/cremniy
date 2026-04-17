@@ -34,7 +34,7 @@ protected slots:
 public:
     explicit BinaryTab(QWidget *parent = nullptr);
 
-    QIcon icon() const override { return QIcon(":/icons/binary.png"); };
+    QIcon icon() const override { return QIcon(":/icons/binary.svg"); };
 
     void setFileDataBuffer(FileDataBuffer* newFileDataBuffer) override;
 

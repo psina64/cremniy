@@ -27,11 +27,12 @@ CodeEditorTab::CodeEditorTab(QWidget* parent)
     rootLayout->setContentsMargins(0, 0, 0, 0);
     rootLayout->setSpacing(0);
 
+    // - - Search - -
     m_searchBar = new QWidget(this);
     auto* searchLayout = new QHBoxLayout(m_searchBar);
     searchLayout->setContentsMargins(8, 6, 8, 6);
     searchLayout->setSpacing(6);
-    m_searchBar->setStyleSheet("background-color: #252525; border-bottom: 1px solid #3a3a3a;");
+    // m_searchBar->setStyleSheet("background-color: #252525; border-bottom: 1px solid #3a3a3a;");
 
     auto* searchLabel = new QLabel("Find:", m_searchBar);
     m_searchEdit = new QLineEdit(m_searchBar);
@@ -44,7 +45,8 @@ CodeEditorTab::CodeEditorTab(QWidget* parent)
     m_replaceAllButton = new QPushButton("Replace All", m_searchBar);
     m_matchCaseCheckBox = new QCheckBox("Match case", m_searchBar);
     m_searchStatusLabel = new QLabel("0/0", m_searchBar);
-    m_searchCloseButton = new QPushButton("x", m_searchBar);
+    m_searchCloseButton = new QPushButton(m_searchBar);
+    m_searchCloseButton->setIcon(QIcon(":/icons/close.svg"));
     m_searchCloseButton->setFixedWidth(28);
 
     searchLayout->addWidget(searchLabel);
@@ -61,7 +63,8 @@ CodeEditorTab::CodeEditorTab(QWidget* parent)
     setReplaceMode(false);
 
     m_searchBar->hide();
-    rootLayout->addWidget(m_searchBar);
+
+    // - - Code Editor - -
     m_codeEditorWidget = new CustomCodeEditor(this);
     m_overlayWidget = new QWidget(this);
     auto overlayLayout = new QVBoxLayout(m_overlayWidget);
@@ -86,6 +89,7 @@ CodeEditorTab::CodeEditorTab(QWidget* parent)
     stack->addWidget(m_codeEditorWidget);
     stack->addWidget(m_overlayWidget);
     rootLayout->addWidget(stackHost);
+    rootLayout->addWidget(m_searchBar);
 
     m_overlayWidget->hide();
 

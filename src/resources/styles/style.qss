@@ -81,12 +81,14 @@ QTabWidget::pane {
 }
 
 #filesTabWidget QTabBar::close-button {
-    image: url(:/icons/close.png);
+    image: url(:/icons/close.svg);
     subcontrol-position: right;
+    padding: 2px;
 }
 
 #filesTabWidget QTabBar::close-button:hover {
-    image: url(:/icons/close.png);
+    image: url(:/icons/close.svg);
+    padding: 1px;
 }
 
 #filesTabWidget QTabBar::tab {
